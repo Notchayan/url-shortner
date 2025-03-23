@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-link"></i> URL Shortener</h1>
+            <p>Simplify your links, track your clicks</p>
+        </header>
+
+        <div class="card">
+            <div class="card-body">
+                <form id="shortenForm">
+                    <div class="form-group">
+                        <label for="url">Enter a long URL</label>
+                        <input type="url" id="url" name="url" required placeholder="https://example.com/very/long/url">
+                    </div>
+                    
+                    <div class="advanced-options">
+                        <div class="toggle-advanced">
+                            <a href="#" id="toggleAdvanced">Advanced options <i class="fas fa-chevron-down"></i></a>
+                        </div>
+                        
+                        <div class="advanced-fields" id="advancedFields">
+                            <div class="form-group">
+                                <label for="alias">Custom alias (optional)</label>
+                                <input type="text" id="alias" name="alias" placeholder="your-custom-name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="expiration">Expires after (days)</label>
+                                <input type="number" id="expiration" name="expiration" min="1" placeholder="Never expires if empty">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-cut"></i> Shorten URL
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div id="result" class="card hidden">
+            <div class="card-body">
+                <h3>Your shortened URL</h3>
+                <div class="url-result">
+                    <input type="text" id="shortUrl" readonly>
+                    <button id="copyButton" class="btn-icon">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                <p>View statistics: <a id="statsLink" href="#"><i class="fas fa-chart-bar"></i> Stats</a></p>
+            </div>
+        </div>
+
+        {% if recent_urls %}
+        <div class="card">
+            <div class="card-header">
+                <h3>Recent URLs</h3>
+            </div>
+            <div class="card-body">
+                <div class="url-list">
+                    {% for url in recent_urls %}
+                    <div class="url-item">
+                        <div class="url-data">
+                            <div class="short-url">
+                                <a href="{{ url.short_url }}" target="_blank">{{ url.short_url }}</a>
+                            </div>
+                            <div class="original-url" title="{{ url.original_url }}">
+                                {{ url.original_url|truncate(50) }}
+                            </div>
+                        </div>
+                        <div class="url-stats">
+                            <span class="click-count" title="Click count">
+                                <i class="fas fa-mouse-pointer"></i> {{ url.click_count }}
+                            </span>
+                            {% if url.expires_at %}
+                            <span class="expiry" title="Expires: {{ url.expires_at }}">
+                                <i class="fas fa-clock"></i>
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>&copy; 2023 URL Shortener. Create short, memorable links in seconds.</p>
+    </footer>
+
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+</body>
+</html> 
