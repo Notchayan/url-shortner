@@ -1,8 +1,6 @@
 # URL Shortener
 
-A powerful and user-friendly URL shortening service built with FastAPI.
-
-![URL Shortener Screenshot](screenshot.png)
+A user-friendly URL shortening service built with FastAPI.
 
 ## Features
 
